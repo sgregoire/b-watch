@@ -1,6 +1,6 @@
 import {Fetch} from "./Fetch";
 import {BuildStatus, error, green, red} from "bwatch-common";
-import fetch from "node-fetch"
+import fetch from "./Proxy";
 import {Decoder} from "tea-cup-core";
 import {Decode as D} from "tea-cup-core";
 
@@ -30,7 +30,15 @@ function getBuildStatus(uuid: string, accessToken: string | undefined, config: T
         headers['Authorization'] = 'token ' + accessToken;
     }
     return fetch(url, {headers})
-        .then(r => r.json())
+        .then(r => r.text())
+        .then(r => {
+            try {
+                return JSON.parse(r);
+            } catch (e) {
+                console.error(uuid, "unable to parse", e, "text", r);
+                throw e;
+            }
+        })
         .then(obj => {
             const { last_build } = obj;
             // console.log("obj", obj);

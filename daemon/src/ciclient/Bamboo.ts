@@ -2,7 +2,7 @@ import {Fetch} from "./Fetch";
 import {BuildStatus, error, green, red} from "bwatch-common";
 import {Decode as D, Decoder} from "tea-cup-core";
 import chalk from "chalk";
-import fetch from "node-fetch";
+import fetch from "./Proxy";
 
 export interface Credentials {
     readonly username: string;
